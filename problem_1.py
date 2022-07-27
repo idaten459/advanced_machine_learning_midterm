@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import cvxpy
 
 def dataset4():
     n = 200
@@ -81,4 +80,5 @@ if __name__ == '__main__':
     plt.plot(np.abs(loss_hist_newton[:show_iter]-np.min(loss_hist_newton)), label='newton')
     plt.legend()
     plt.yscale('log')
-    plt.show()
+    #plt.show()
+    plt.savefig('problem_1.png')
