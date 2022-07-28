@@ -28,26 +28,19 @@ def lasso(lambda_):
     print(gamma)
     ws = []
     ws.append(w)
-    for i in range(100):
+    for _ in range(100):
         w = soft_threshold(lambda_ / gamma, w - delta_psi(A,w,mu)/gamma)
         ws.append(w)
     return ws
-    #n, d = X.shape
-    #w = np.zeros(d)
-    #for i in range(n):
-    #    w = w + soft_threshold(X[i] @ w - y[i], t)
-    #return w
 
 if __name__=='__main__':
     ws_2 = lasso(2)
     ws_4 = lasso(4)
     ws_6 = lasso(6)
-    #print(ws)
     plt.plot([np.linalg.norm(b) for b in ws_2-ws_2[-1]], label=f'lambda={2}')
     plt.plot([np.linalg.norm(b) for b in ws_4-ws_4[-1]], label=f'lambda={4}')
     plt.plot([np.linalg.norm(b) for b in ws_6-ws_6[-1]], label=f'lambda={6}')
     plt.legend()
     plt.yscale('log')
-    #plt.show()
     plt.savefig('problem_2.png')
 
