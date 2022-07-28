@@ -7,7 +7,6 @@ def opt(lambda_):
     A = np.array([[3,0.5],[0.5,1]])
     mu = np.array([[1,2]]).T
     w = cv.Variable(mu.shape)
-    lambda_ = 2
     objective = cv.Minimize(cv.quad_form(w-mu, A) + lambda_ * cv.norm(w,1))
     prob = cv.Problem(objective)
     result = prob.solve()
