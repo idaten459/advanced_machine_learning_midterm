@@ -8,11 +8,6 @@ def dataset4():
     y_d4 = 2 * y_d4 - 1
     return x_d4, y_d4
 
-# return sigmoid(x)
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-
 def calc_loss(x, y, w, lamb=0.01):
     res = 0.0
     n = x.shape[0]
@@ -46,12 +41,8 @@ def calc_hess(x, y, w, lamb=0.01):
     n = x.shape[0]
     d = x.shape[1]
     for i in range(n):
-        #print(f'x[{i}]',x[i])
-        #print(x[i] @ x[i].T)
         x_mat = np.array([x[i]]).T
-        #print('x_mat',x_mat)
-        #print(x_mat @ x_mat.T)
-        res += np.exp(-y[i] * (w.T @ x[i])) / (1 + np.exp(-y[i] * (w.T @ x[i]))) ** 2 * (x_mat @ x_mat.T) * y[i] ** 2
+        res += np.exp(-y[i] * (w.T @ x[i])) / (1 + np.exp(-y[i] * (w.T @ x[i]))) ** 2 * (x_mat @ x_mat.T)
     res += 2 * lamb * np.eye(d)
     return res
 
@@ -64,21 +55,26 @@ def newton_method(epoch=100, lr=1.0):
     for _ in range(epoch):
         grad = calc_grad(x_d4, y_d4, w)
         hess = calc_hess(x_d4, y_d4, w)
-        #print(hess)
         w -= lr * np.linalg.inv(hess) @ grad
         loss_hist_newton.append(calc_loss(x_d4, y_d4, w))
-        #print(_,calc_loss(x_d4, y_d4, w))
     return loss_hist_newton
 
 if __name__ == '__main__':
     np.random.seed(42)
-    loss_hist_batch = batch_steepest_gradient(epoch=200,lr=0.01)
-    loss_hist_newton = newton_method(epoch=200,lr=0.01)
-    show_iter = 200
-    min_loss = min(np.min(loss_hist_batch), np.min(loss_hist_newton)) # ここ要修正かも
-    plt.plot(np.abs(loss_hist_batch[:show_iter]-np.min(loss_hist_batch)), label='steepest')
-    plt.plot(np.abs(loss_hist_newton[:show_iter]-np.min(loss_hist_newton)), label='newton')
+    loss_hist_batch = batch_steepest_gradient(epoch=300,lr=1e-5)
+    loss_hist_newton = newton_method(epoch=300,lr=1e-5)
+    #show_iter = 200
+    min_loss = min(np.min(loss_hist_batch), np.min(loss_hist_newton))
+    plt.plot(np.abs(loss_hist_batch[:]-min_loss), label='steepest')
+    plt.plot(np.abs(loss_hist_newton[:]-min_loss), label='newton')
     plt.legend()
     plt.yscale('log')
     #plt.show()
-    plt.savefig('problem_1.png')
+    plt.savefig('problem_1_common_min.png')
+
+    plt.clf()
+    plt.plot(np.abs(loss_hist_batch[:]-np.min(loss_hist_batch)), label='steepest')
+    plt.plot(np.abs(loss_hist_newton[:]-np.min(loss_hist_newton)), label='newton')
+    plt.legend()
+    plt.yscale('log')
+    plt.savefig('problem_1_each_min.png')

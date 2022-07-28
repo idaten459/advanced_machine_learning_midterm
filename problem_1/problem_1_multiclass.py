@@ -56,12 +56,7 @@ def calc_hess(x, y, w, lamb=0.01):
     d = x.shape[1]
     for c in range(3):
         for i in range(n):
-            #print(f'x[{i}]',x[i])
-            #print(x[i] @ x[i].T)
             x_mat = np.array([x[i]]).T
-            #print('x_mat',x_mat)
-            #print((x_mat @ x_mat.T).shape)
-            #print(res[c].shape)
             res[c] += np.exp(-y[c][i] * (w[c].T @ x[i])) / (1 + np.exp(-y[c][i] * (w[c].T @ x[i]))) ** 2 * (x_mat @ x_mat.T) * y[c][i] ** 2
         res[c] += 2 * lamb * np.eye(d)
     return res
@@ -84,15 +79,19 @@ def newton_method(epoch=100, lr=1.0):
     return loss_hist_newton
 
 if __name__ == '__main__':
-    #x_d5, y_d5 = dataset5()
-    #x_d5, y_d5 = preprocess(x_d5, y_d5)
     np.random.seed(42)
-    loss_hist_batch = batch_steepest_gradient(epoch=200,lr=0.01)
-    loss_hist_newton = newton_method(epoch=200,lr=0.01)
-    #show_iter = 200
-    #min_loss = min(np.min(loss_hist_batch), np.min(loss_hist_newton)) # ここ要修正かも
+    loss_hist_batch = batch_steepest_gradient(epoch=300,lr=1e-5)
+    loss_hist_newton = newton_method(epoch=300,lr=1e-5)
+    min_loss = min(np.min(loss_hist_batch), np.min(loss_hist_newton))
+    plt.plot(np.abs(loss_hist_batch[:]-min_loss), label='steepest')
+    plt.plot(np.abs(loss_hist_newton[:]-min_loss), label='newton')
+    plt.legend()
+    plt.yscale('log')
+    plt.savefig('problem_1_multiclass_common_min.png')
+
+    plt.clf()
     plt.plot(np.abs(loss_hist_batch[:]-np.min(loss_hist_batch)), label='steepest')
     plt.plot(np.abs(loss_hist_newton[:]-np.min(loss_hist_newton)), label='newton')
     plt.legend()
     plt.yscale('log')
-    plt.show()
+    plt.savefig('problem_1_multiclass_each_min.png')
