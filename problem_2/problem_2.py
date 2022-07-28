@@ -40,6 +40,8 @@ if __name__=='__main__':
     plt.plot([np.linalg.norm(b) for b in ws_2-ws_2[-1]], label=f'lambda={2}')
     plt.plot([np.linalg.norm(b) for b in ws_4-ws_4[-1]], label=f'lambda={4}')
     plt.plot([np.linalg.norm(b) for b in ws_6-ws_6[-1]], label=f'lambda={6}')
+    plt.xlabel('step')
+    plt.ylabel('||w-w_last||')
     plt.legend()
     plt.yscale('log')
     plt.savefig('problem_2.png')
