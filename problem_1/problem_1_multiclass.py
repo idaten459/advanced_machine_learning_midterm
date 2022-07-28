@@ -15,8 +15,6 @@ def dataset5():
 def preprocess(x_d5, y_d5):
     num_classes = 3
     ty_d5 = np.eye(num_classes)[y_d5].T
-    print(y_d5)
-    print(ty_d5)
     return x_d5, ty_d5
 
 def calc_loss(x, y, w, lamb=0.01):
@@ -71,11 +69,9 @@ def newton_method(epoch=100, lr=1.0):
     for _ in range(epoch):
         grad = calc_grad(x_d5, y_d5, w)
         hess = calc_hess(x_d5, y_d5, w)
-        #print(hess)
         for c in range(3):
             w[c] -= lr * np.linalg.inv(hess[c]) @ grad[c]
         loss_hist_newton.append(calc_loss(x_d5, y_d5, w))
-        #print(_,calc_loss(x_d4, y_d4, w))
     return loss_hist_newton
 
 if __name__ == '__main__':

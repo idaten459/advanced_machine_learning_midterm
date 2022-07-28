@@ -25,7 +25,6 @@ def lasso(lambda_):
     w = np.random.randn(2,1)
     gamma, _ = np.linalg.eig(A*2)
     gamma = np.max(gamma)
-    print(gamma)
     ws = []
     ws.append(w)
     for _ in range(100):
